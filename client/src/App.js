@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import axios from "axios";
+import axios from 'axios';
 
 class App extends Component {
   state = {
@@ -9,7 +9,7 @@ class App extends Component {
     intervalIsSet: false,
     idToDelete: null,
     idToUpdate: null,
-    objectToUpdate: null
+    objectToUpdate: null,
   };
 
   // fetch all existing data in db and incorporate polling logic to see
@@ -18,7 +18,7 @@ class App extends Component {
     this.getDataFromDb();
     if (!this.state.intervalIsSet) {
       let interval = setInterval(this.getDataFromDb, 1000);
-      this.setState({ intervalIsSet: interval });
+      this.setState({intervalIsSet: interval});
     }
   }
 
@@ -34,7 +34,7 @@ class App extends Component {
   getDataFromDb = () => {
     fetch("http://localhost:3001/api/getData")
       .then(data => data.json())
-      .then(res => this.setState({ data: res.data }));
+      .then(res => this.setState({data: res.data}));
   };
 
   // put method
@@ -54,8 +54,8 @@ class App extends Component {
   // delete method
   deleteFromDB = idTodelete => {
     let objIdToDelete = null;
-    this.state.data.forEach(dat => {
-      if (dat.id === idTodelete) {
+    this.state.data.forEach((dat) => {
+      if (dat.id === parseInt(idTodelete)) {
         objIdToDelete = dat._id;
       }
     });
@@ -68,28 +68,28 @@ class App extends Component {
   };
 
   // update data
-  updateDB = (idToUpdate, updateToApply) => {
+  updateDB = (idToupdate, updateToApply) => {
     let objIdToUpdate = null;
-    this.state.data.forEach(dat => {
-      if (dat.id === idToUpdate) {
+    this.state.data.forEach((dat) => {
+      if (dat.id === parseInt(idToupdate)) {
         objIdToUpdate = dat._id;
       }
     });
 
     axios.post("http://localhost:3001/api/updateData", {
       id: objIdToUpdate,
-      update: { message: updateToApply }
+      update: {message: updateToApply}
     });
   };
 
   // UI using JSX
   render() {
-    const { data } = this.state;
+    const {data} = this.state;
     return (
       <div>
         <ul>
-          {data.length <= 0 ? "NO DB ENTRIES YET" : data.map(dat => (
-            <li style={{padding: "10px"}} key={dat}>
+          {data.length <= 0 ? "NO DB ENTRIES YET" : data.map((dat) => (
+            <li style={{padding: "10px"}} key={dat.messasge}>
               <span style={{color: "gray"}}> id: </span> {dat.id} <br />
               <span style={{color: "gray"}}> data: </span>
               {dat.message}
