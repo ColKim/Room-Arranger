@@ -9,6 +9,7 @@ const roomSchema = new Schema(
     	type: Array,
     	lines: Line
     },
+    type: Number,
   },
   { timestamps: true }
 );
