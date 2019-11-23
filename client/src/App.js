@@ -1,94 +1,125 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 
-class EditForm extends React.Component {
+class WallForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			startx: 0,
-			starty: 0,
-			length: 50,
-			build: 1,
-			direct: 3
+			x1ToEdit: props.startx,
+			y1ToEdit: props.starty,
+			x2ToEdit: props.endx,
+			y2ToEdit: props.endy,
+			buildToEdit: props.build,
+			showForm: false
 		};
+		this.handleChange = this.handleChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleButton = this.handleButton.bind(this);
 	}
 
 	handleChange(event) {
 		const name = event.target.name;
 		const value = event.target.value;
 		this.setState({[name]: value});
-	}
+	};
 
 	handleSubmit(event) {
+		// alert("handleSubmit called");
+		event.preventDefault();
+		// this.setState({showForm: !this.showForm});
+		if (this.props.editing) {
+			// axios.post("http://localhost:3001/api/updateData", {
+			// 	id: this.prop._id,
+			// 	x1: this.state.x1ToEdit,
+			// 	y1: this.state.y1ToEdit,
+			// 	x2: this.state.x2ToEdit,
+			// 	y2: this.state.y2ToEdit,
+			// 	build: this.state.buildToEdit
+			// });
+		}
+		else {
+			// alert("Submitted");
+			// axios.post("http://localhost:3001/api/putData", {
+			// 	x1: this.state.x1ToEdit,
+			// 	y1: this.state.y1ToEdit,
+			// 	x2: this.state.x2ToEdit,
+			// 	y2: this.state.y2ToEdit,
+			// 	build: this.state.buildToEdit
+			// });
+		}
+		this.setState({showForm: false})
+	};
 
+	handleButton() {
+		console.log("Button was: ", this.showForm);
+		this.setState({showForm: !this.showForm});
+		console.log("Button is now: ", this.showForm);
 	}
 
-	// Add
-
 	render() {
-		return (
-			<form style={{padding: "10px"}} onSubmit={this.handleSubmit}>
-
-				{// start x
-				}
-				<input
-					name="startx"
-					type="number"
-					value={this.state.start}
-					onChange={this.handleChange}
-					placeholder="Ex: 0"
-					style={{width: "200px"}}
-				/> <br />
-
-				{// start y
-				}
-				<input
-					name="starty"
-					type="number"
-					value={this.state.start}
-					onChange={this.handleChange}
-					placeholder="Ex: 0"
-					style={{width: "200px"}}
-				/> <br />
-
-				{// length
-				}
-				<input
-						name="length"
+		// alert("rendered");
+		if (this.state.showForm) {
+			return (
+				<form style={{padding: "10px"}} onSubmit={this.handleSubmit}>
+					<input
+						name="x1ToEdit"
 						type="number"
 						value={this.state.start}
 						onChange={this.handleChange}
 						placeholder="Ex: 0"
 						style={{width: "200px"}}
-				/> <br />
+					/> <br />
 
-				{// build 1-wall, 2-window, 3-door
-				}
-				<select value={this.state.value} onChange={this.handleChange}>
-					<option name="build" value={1}>Wall</option>
-					<option name="build" value={2}>Window</option>
-					<option name="build" value={3}>Door</option>
-				</select> <br />
+					<input
+						name="y1ToEdit"
+						type="number"
+						value={this.state.start}
+						onChange={this.handleChange}
+						placeholder="Ex: 0"
+						style={{width: "200px"}}
+					/> <br />
 
-				{// direction 1-down, 2-right, 3-up, 4-left
-				}
-				<select value={this.state.value} onChange={this.handleChange}>
-					<option name="direct" value={3}>Up</option>
-					<option name="direct" value={1}>Down</option>
-					<option name="direct" value={2}>Right</option>
-					<option name="direct" value={4}>Left</option>
-				</select> <br />
+					<input
+						name="x2ToEdit"
+						type="number"
+						value={this.state.start}
+						onChange={this.handleChange}
+						placeholder="Ex: 0"
+						style={{width: "200px"}}
+					/> <br />
 
-				{// submit form
-				}
-				<input type="submit" value="Submit" />
+					<input
+						name="y2ToEdit"
+						type="number"
+						value={this.state.start}
+						onChange={this.handleChange}
+						placeholder="Ex: 0"
+						style={{width: "200px"}}
+					/> <br />
 
-			</form>
-		);
+					<select value={this.state.value} onChange={this.handleChange}>
+						<option name="buildToEdit" value={1}>Wall</option>
+						<option name="buildToEdit" value={2}>Window</option>
+						<option name="buildToEdit" value={3}>Door</option>
+					</select> <br />
+
+					<input type="submit" value="Submit" />
+				</form>
+			);
+		}
+		else if (this.editing) {
+			return (
+				<button onClick={this.handleButton}>Edit</button>
+			);
+		}
+		else {
+			return (
+				<button onClick={this.handleButton}>Add Wall</button>
+			);
+		}
 	}
 }
 
-// TODO: change to class component
 class WallList extends React.Component{
 	constructor(props){
 		super(props);
@@ -98,12 +129,11 @@ class WallList extends React.Component{
 	}
 
 	render() {
-
 		return (
 			<div>
 				{this.props.walls.length <= 0 ? "NO ENTRIES YET" : this.props.walls.map((wall) => (
 					<li style={{padding: "10px"}} key={wall.id}>
-						<span style={{color: "gray"}}> id: </span> {wall.id} <br />
+						<span style={{color: "gray"}}> id: </span> {wall._id} <br />
 						<span style={{color: "gray"}}> x1: </span> {wall.x1} <br />
 						<span style={{color: "gray"}}> y1: </span> {wall.y1} <br />
 						<span style={{color: "gray"}}> x2: </span> {wall.x2} <br />
@@ -115,10 +145,20 @@ class WallList extends React.Component{
 						<button onClick={() => this.props.del(wall.id)}>
 							DELETE
 						</button>
+						
+						<WallForm editing={true}/>
 
 					</li>
 				))}
-				<EditForm />
+				<br />
+				<WallForm 
+					x1={0}
+					y1={0}
+					x2={0}
+					y2={50}
+					build={1}
+					editing={false}
+				/>
 	    </div>
 		)
 	}
@@ -225,67 +265,67 @@ class App extends Component {
     const {data} = this.state;
     return (
       <div>
-        {// Room Tab
-
-      	// Wall List
-      }
-      	<WallList walls={this.state.room} del={this.deleteFromDB} />
-        
-
-        {// Add
-        }
-        <div style={{padding: "10px"}}>
-          <input
-            type="text"
-            onChange={e => this.setState({message: e.target.value})}
-            placeholder="add something in the database"
-            style={{width: "200px"}}
-          />
-          <button onClick={() => this.putDataToDB(this.state.message)}>
-            ADD
-          </button>
-        </div>
-
-        {// Delete
-        }
-        <div style={{padding: "10px"}}>
-          <input
-            type="text"
-            style={{width: "200px"}}
-            onChange={e => this.setState({idToDelete: e.target.value})}
-            placeholder="put id of item to delete here"
-          />
-          <button onClick={() => this.deleteFromDB(this.state.idToDelete)}>
-            DELETE
-          </button>
-        </div>
-
-        {// Update
-        }
-        <div style={{padding: "10px"}}>
-          <input
-            type="text"
-            style={{width: "200px"}}
-            onChange={e => this.setState({idToUpdate: e.target.value})}
-            placeholder="id of item to update here"
-          />
-          <input
-            type="text"
-            style={{width: "200px"}}
-            onChange={e => this.setState({updateToApply: e.target.value})}
-            placeholder="put new value of the item here"
-          />
-          <button
-            onClick={() =>
-              this.updateDB(this.state.idToUpdate, this.state.updateToApply)
-            }
-          >
-            UPDATE
-          </button>
-        </div>
+      	{
+      		// Room Tab
+      	}
+      	<WallList 
+      		walls={this.state.room} 
+      		del={this.deleteFromDB}
+    		/>
       </div>
     );
   }
 }
 
 export default App;
+
+
+        // {// Add
+        // }
+        // <div style={{padding: "10px"}}>
+        //   <input
+        //     type="text"
+        //     onChange={e => this.setState({message: e.target.value})}
+        //     placeholder="add something in the database"
+        //     style={{width: "200px"}}
+        //   />
+        //   <button onClick={() => this.putDataToDB(this.state.message)}>
+        //     ADD
+        //   </button>
+        // </div>
+        // {// Delete
+        // }
+        // <div style={{padding: "10px"}}>
+        //   <input
+        //     type="text"
+        //     style={{width: "200px"}}
+        //     onChange={e => this.setState({idToDelete: e.target.value})}
+        //     placeholder="put id of item to delete here"
+        //   />
+        //   <button onClick={() => this.deleteFromDB(this.state.idToDelete)}>
+        //     DELETE
+        //   </button>
+        // </div>
+        // {// Update
+        // }
+        // <div style={{padding: "10px"}}>
+        //   <input
+        //     type="text"
+        //     style={{width: "200px"}}
+        //     onChange={e => this.setState({idToUpdate: e.target.value})}
+        //     placeholder="id of item to update here"
+        //   />
+        //   <input
+        //     type="text"
+        //     style={{width: "200px"}}
+        //     onChange={e => this.setState({updateToApply: e.target.value})}
+        //     placeholder="put new value of the item here"
+        //   />
+        //   <button
+        //     onClick={() =>
+        //       this.updateDB(this.state.idToUpdate, this.state.updateToApply)
+        //     }
+        //   >
+        //     UPDATE
+        //   </button>
+        // </div>
