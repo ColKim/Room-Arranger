@@ -12,4 +12,11 @@ const roomSchema = new Schema(
   { timestamps: true }
 );
 
+// // Virtual for author's URL
+// AuthorSchema
+// .virtual('url')
+// .get(function () {
+//   return '/catalog/author/' + this._id;
+// });
+
 module.exports = mongoose.model("Room", RoomSchema);
