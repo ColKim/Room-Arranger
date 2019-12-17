@@ -23,7 +23,7 @@ class FurnForm extends React.Component {
 
 	handleChange(event) {
 		const name = event.target.name;
-		const value = event.target.value;
+		const value = parseInt(event.target.value);
 		this.setState({[name]: value});
 	};
 
@@ -45,6 +45,7 @@ class FurnForm extends React.Component {
 			})
 			.then(res => {
 				console.log(res.data);
+				console.log("Furniture Updated")
 				this.props.refresh();
 			})
 			.catch((error) => {
@@ -52,7 +53,6 @@ class FurnForm extends React.Component {
 			});
 		}
 		else {
-			alert("Submitted");
 			axios.post("http://localhost:3001/furniture/putData", {
 				x1: this.state.x1ToEdit,
 				y1: this.state.y1ToEdit,
@@ -221,6 +221,7 @@ export default class FurnList extends React.Component{
 						x4={0}
 						y4={30}
 						editing={false}
+						refresh={this.props.getData}
 					/>
 				</div>
 			);

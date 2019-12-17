@@ -20,7 +20,7 @@ class WallForm extends React.Component {
 
 	handleChange(event) {
 		const name = event.target.name;
-		const value = event.target.value;
+		const value = parseInt(event.target.value);
 		this.setState({[name]: value});
 	};
 
@@ -44,7 +44,6 @@ class WallForm extends React.Component {
 			});
 		}
 		else {
-			alert("Submitted");
 			axios.post("http://localhost:3001/room/putData", {
 				x1: this.state.x1ToEdit,
 				y1: this.state.y1ToEdit,
@@ -54,6 +53,7 @@ class WallForm extends React.Component {
 			})
 			.then(res => {
 				console.log(res.data);
+				console.log("Room Added")
 				this.props.refresh();
 			})
 			.catch((error) => {
@@ -148,7 +148,7 @@ export default class WallList extends React.Component{
 						<span style={{color: "gray"}}> y2: </span> {wall.y2} <br />
 						<span style={{color: "gray"}}> build: </span> {wall.build} <br />
 
-						<button onClick={() => this.deleteFromDB(wall._id)}>
+						<button onClick={() => this.props.deleteData(wall._id)}>
 							DELETE
 						</button>
 						
@@ -160,7 +160,7 @@ export default class WallList extends React.Component{
 							build={wall.build}
 							editing={true}
 							id={wall._id}
-							refresh={this.getRoomFromDB}
+							refresh={this.props.getData}
 						/>
 					</li>
 				))}
@@ -172,6 +172,7 @@ export default class WallList extends React.Component{
 					y2={50}
 					build={1}
 					editing={false}
+					refresh={this.props.getData}
 				/>
 	    </div>
 		);

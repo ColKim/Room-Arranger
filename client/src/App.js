@@ -47,6 +47,7 @@ class App extends Component {
   		.catch((error) => {
   			console.log(error.data);
   		});
+  	console.log("Received New Room Data");
   };
 
   // delete method for room's walls
@@ -75,6 +76,7 @@ class App extends Component {
 			.catch((error) => {
 				console.log(error.data);
 			});
+  	console.log("Received New Furniture Data");
 	};
 
 	// delete method for furniture's walls

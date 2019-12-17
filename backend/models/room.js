@@ -19,4 +19,6 @@ const roomSchema = new Schema(
 //   return '/catalog/author/' + this._id;
 // });
 
-module.exports = mongoose.model("Room", RoomSchema);
+const Room = mongoose.model("Room", roomSchema);
+
+module.exports = Room;

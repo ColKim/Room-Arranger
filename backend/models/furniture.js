@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const furniture = new Schema(
+const furnitureSchema = new Schema(
   {
     x1: Number,
     y1: Number,
@@ -15,4 +15,6 @@ const furniture = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Furniture", FurnitureSchema);
+const Furniture = mongoose.model("Furniture", furnitureSchema);
+
+module.exports = Furniture;
