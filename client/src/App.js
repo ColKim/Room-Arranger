@@ -1,33 +1,34 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+// import { render } from "react-dom";
 
-import 
+import WallList from "./components/room"
+import FurnList from "./components/furniture"
+//import CreateUser from "./components/create-user.component";
 
 class App extends Component {
-  state = {
-  	// old app
-    data: [],
-    id: 0,
-    message: null,
-    intervalIsSet: false,
-    idToDelete: null,
-    idToUpdate: null,
-    objectToUpdate: null,
-    // wall state
-    room: [],
-    furniture: [],
-
-  };
+	constructor(props) {
+		super(props);
+	  this.state = {
+	  	walls: [],
+	    furniture: []
+	  };
+		this.getDataRoom = this.getDataRoom.bind(this);
+		this.deleteDataRoom = this.deleteDataRoom.bind(this);
+		this.getDataFurniture = this.getDataFurniture.bind(this);
+		this.deleteDataFurniture = this.deleteDataFurniture.bind(this);
+	}
 
   // fetch all existing data in db and incorporate polling logic to see
   // if db has changed and implement changes into UI
   componentDidMount() {
-    this.getDataFromDb();
-    if (!this.state.intervalIsSet) {
-      let interval = setInterval(this.getDataFromDb, 1000);
-      this.setState({intervalIsSet: interval});
-    }
-  }
+    this.getDataRoom();
+    this.getDataFurniture();
+    // if (!this.state.intervalIsSet) {
+    //   let interval = setInterval(this.getDataFromDb, 1000);
+    //   this.setState({intervalIsSet: interval});
+    // }
+  };
 
   // kill process after done using
   componentWillUnmount() {
@@ -35,86 +36,80 @@ class App extends Component {
       clearInterval(this.state.intervalIsSet);
       this.setState({ intervalIsSet: null });
     }
-  }
-
-  // TODO:
-  // get
-  // put
-  // update delete
-
-  // TODO
-  // get method
-  getRoomFromDB = () => {
-    fetch("http://localhost:3001/room/getData")
-      .then(data => data.json())
-      .then(res => this.setState({data: res.data}));
   };
 
-  // TODO delete
-  // put method delete
-  putDataToDB = message => {
-    let currentIds = this.state.data.map(data => data.id);
-    let idToBeAdded = 0;
-    while (currentIds.includes(idToBeAdded)) {
-      ++idToBeAdded;
-    }
-    //const {id, walls, type} = req.body;
-    axios.post("http://localhost:3001/api/putData", { 
-      id: idToBeAdded,
-      message: message,
-    });
+  // get method for room's walls
+  getDataRoom() {
+  	axios.get("http://localhost:3001/room/getData")
+  		.then(res => {
+  			this.setState({walls: res.data})
+  		})
+  		.catch((error) => {
+  			console.log(error.data);
+  		});
   };
 
-  // delete method
-  deleteFromDB = idTodelete => {
-    let objIdToDelete = null;
-    this.state.data.forEach((dat) => {
-      if (dat.id === parseInt(idTodelete)) {
-        objIdToDelete = dat._id;
-      }
-    });
-
-    axios.delete("http://localhost:3001/api/deleteData", {
+  // delete method for room's walls
+  deleteDataRoom(idToDelete) {
+  	// remove from database
+    axios.delete("http://localhost:3001/room/deleteData", {
       data: {
-        id: objIdToDelete
+        id: idToDelete
       }
-    });
+    })
+    	.then(res => console.log(res.data))
+    	.catch((error) => console.log(error.data));
+
+    // remove from component
+    this.setState({
+    	walls: this.state.walls.filter(wall => wall._id !== idToDelete)
+    })
   };
 
-  // TODO delete 
-  // update data
-  updateDB = (idToupdate, updateToApply) => {
-    let objIdToUpdate = null;
-    this.state.data.forEach((dat) => {
-      if (dat.id === parseInt(idToupdate)) {
-        objIdToUpdate = dat._id;
-      }
-    });
+  // get method for furniture's walls
+	getDataFurniture() {
+		axios.get("http://localhost:3001/furniture/getData")
+			.then(res => {
+				this.setState({furniture: res.data})
+			})
+			.catch((error) => {
+				console.log(error.data);
+			});
+	};
 
-    axios.post("http://localhost:3001/api/updateData", {
-      id: objIdToUpdate,
-      update: {message: updateToApply}
-    });
-  };
+	// delete method for furniture's walls
+	deleteDataFurniture(idToDelete) {
+		// remove from database
+		axios.delete("http://localhost:3001/furniture/deleteData", {
+			data: {
+				id: idToDelete
+			}
+		})
+		.then(res => console.log(res.data))
+		.catch((error) => console.log(error.data));
 
+		// remove from component
+		this.setState({
+			furniture: this.state.furniture.filter(piece => piece._id !== idToDelete)
+		})
+	};
 
   // Components should be Capitalized
   // Events should use camelCase
   // UI using JSX
   render() {
-    const {data} = this.state;
     return (
       <div>
-      	{
-      		// Room Tab
-      	}
-      	<WallList 
-      		walls={this.state.room} 
-      		del={this.deleteFromDB}
-    		/>
-    		<FurnList 
-    			furniture={this.state.furniture}
-    			del={this.deleteFromDB}
+      	
+      	<WallList
+      		data={this.state.walls}
+      		getData={this.getDataRoom}
+      		deleteData={this.deleteDataRoom}
+      	/>
+      	<FurnList
+    			data={this.state.furniture}
+    			getData={this.getDataFurniture}
+    			deleteData={this.deleteDataFurniture}
     		/>
       </div>
     );

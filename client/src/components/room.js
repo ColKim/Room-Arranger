@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import axios from 'axios';
 
 // form
@@ -134,47 +134,12 @@ class WallForm extends React.Component {
 }
 
 // listing component for walls in room tab
-class WallList extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			data: []
-		};
-		this.getRoomFromDB = this.getRoomFromDB.bind(this);
-		this.deleteFromDB = this.deleteFromDB.bind(this);
-	};
-
-  getRoomFromDB() {
-  	axios.get("http://localhost:3001/room/getData")
-  		.then(res => {
-  			this.setState({data: res.data})
-  		})
-  		.catch((error) => {
-  			console.log(error.data);
-  		});
-  };
-
-  // delete method
-  deleteFromDB(idToDelete) {
-  	// remove from database
-    axios.delete("http://localhost:3001/room/deleteData", {
-      data: {
-        id: idToDelete
-      }
-    })
-    	.then(res => console.log(res.data))
-    	.catch((error) => console.log(error.data));
-
-    // remove from component
-    this.setState({
-    	data: this.state.data.filter(wall => wall._id !== idToDelete)
-    })
-  };
-
+// class WallList extends React.Component {
+export default class WallList extends React.Component{
 	render () {
 		return (
 			<div>
-				{this.state.data.length <= 0 ? "NO WALLS YET" : this.state.data.map((wall) => (
+				{this.props.data.length <= 0 ? "NO WALLS YET" : this.props.data.map((wall) => (
 					<li style={{padding: "10px"}} key={wall._id}>
 						<span style={{color: "gray"}}> id: </span> {wall._id} <br />
 						<span style={{color: "gray"}}> x1: </span> {wall.x1} <br />
