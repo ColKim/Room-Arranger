@@ -42,6 +42,8 @@ router.post("/updateData", (req, res) => {
       furniture.x4 = update.x4;
       furniture.y4 = update.y4;
 
+      console.log("HELP");
+
       furniture.save()
         .then(() => res.status(200).json("Furniture Updated"))
         .catch(err => res.status(400).json("Error: " + err));

@@ -28,7 +28,7 @@ class WallForm extends React.Component {
 		event.preventDefault();
 		if (this.props.editing) {
 			axios.post("http://localhost:3001/room/updateData", {
-				id: this.prop.id,
+				id: this.props.id,
 				update: {x1: this.state.x1ToEdit,
 					y1: this.state.y1ToEdit,
 					x2: this.state.x2ToEdit,
@@ -110,10 +110,10 @@ class WallForm extends React.Component {
 						style={{width: "200px"}}
 					/> <br />
 
-					<select value={this.state.value} onChange={this.handleChange}>
-						<option name="buildToEdit" value={1}>Wall</option>
-						<option name="buildToEdit" value={2}>Window</option>
-						<option name="buildToEdit" value={3}>Door</option>
+					<select name="buildToEdit" value={this.state.value} onChange={this.handleChange}>
+						<option value="1">Wall</option>
+						<option value="2">Window</option>
+						<option value="3">Door</option>
 					</select> <br />
 
 					<input type="submit" value="Submit" />
@@ -170,7 +170,7 @@ export default class WallList extends React.Component{
 					y1={0}
 					x2={0}
 					y2={50}
-					build={1}
+					build="1"
 					editing={false}
 					refresh={this.props.getData}
 				/>

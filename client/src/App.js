@@ -4,7 +4,6 @@ import axios from 'axios';
 
 import WallList from "./components/room"
 import FurnList from "./components/furniture"
-//import CreateUser from "./components/create-user.component";
 
 class App extends Component {
 	constructor(props) {
