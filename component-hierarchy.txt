@@ -1,0 +1,25 @@
+App
+|_Room Tab
+| |_Wall list
+| | |_Wall Data
+| |   |_Delete Button
+| |   |_Edit Button
+| |     |_Wall Form
+| |       |_Save Button
+| |_Add Wall Button
+|   |_Wall Form
+|     |_Save Button
+|_Furniture Tab
+| |_Furniture List
+| | |_Furniture
+| |   |_Delete Button
+| |   |_Copy Button
+| |     |_Furniture Form
+| |       |_Save Button
+| |_Add Furniture Button
+|   |_Furniture Form
+|     |_save Button
+|_Workspace
+  |_Room SVG
+  |_Furniture SVG
+    |_Click N Drag Component
