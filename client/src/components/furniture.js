@@ -31,7 +31,7 @@ class FurnForm extends React.Component {
 		event.preventDefault();
 		if (this.props.editing) {
 			axios.post("http://localhost:3001/furniture/updateData", {
-				id: this.prop._id,
+				id: this.props.id,
 				update: {
 					x1: this.state.x1ToEdit,
 					y1: this.state.y1ToEdit,
